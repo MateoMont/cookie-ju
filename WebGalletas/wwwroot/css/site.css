@@ -1,0 +1,273 @@
+
+:root {
+    --color-principal: #D98A29; /* Naranja oscuro: barra, botones */
+    --color-secundario: #fad7a0; /* Naranja claro: fondo, cards */
+    --color-tercero: #A65132; /* Marrón */
+    --color-cuarto: #F26457; /* Coral oscuro */
+    --color-fondo: #FFF9F0; /* Fondo crema claro */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color:var(--color-fondo);
+    background-repeat: no-repeat;
+    background-position: center top; /* El logo en el centro-arriba */
+    background-size: 200px; /* Más chico para parecer una gota */
+    background-attachment: fixed; /* Para que quede fijo al hacer scroll */
+    background-blend-mode: normal; /* No mezclar */
+}
+
+
+
+
+
+
+/* Navbar mejorado */
+.navbar {
+    background-color: var(--color-secundario);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid var(--color-principal);
+}
+
+.navbar-brand {
+    padding: 10px;
+
+    border-radius: 8px;
+}
+
+    .navbar-brand img {
+        height: 120px;
+        transition: transform 0.3s;
+    }
+
+    .navbar-brand:hover img {
+        transform: scale(1.05);
+    }
+
+.navbar-nav .nav-link {
+    color: var(--color-tercero);
+    font-weight: 500;
+    margin: 0 8px;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: var(--color-principal);
+    }
+
+.btn-ver-pedidos {
+    border-color: var(--color-tercero);
+    color: var(--color-tercero);
+}
+
+    .btn-ver-pedidos:hover {
+        background-color: var(--color-tercero);
+        color: white !important;
+    }
+
+/* Cards modernas */
+.card {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+.flavor-card, .options-card, .cart-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+    .flavor-card h3, .options-card h3, .cart-card h3 {
+        color: var(--color-tercero);
+    }
+
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+    .section-title:after {
+        content: '';
+        position: absolute;
+        width: 50%;
+        height: 3px;
+        background-color: var(--color-principal);
+        bottom: -5px;
+        left: 0;
+    }
+
+/* Botones mejorados */
+.btn-primary {
+    background-color: var(--color-principal);
+    border-color: var(--color-principal);
+    padding: 10px 20px;
+    font-weight: 500;
+}
+
+    .btn-primary:hover {
+        background-color: var(--color-tercero);
+        border-color: var(--color-tercero);
+        transform: translateY(-2px);
+    }
+
+/* Controles de cantidad */
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+    .quantity-control button {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: var(--color-principal);
+        color: white;
+        border: none;
+        font-weight: bold;
+    }
+
+        .quantity-control button:hover {
+            background-color: var(--color-tercero);
+        }
+
+.quantity-input {
+    width: 60px;
+    text-align: center;
+    margin: 0 10px;
+}
+
+/* Carrito */
+.empty-cart {
+    text-align: center;
+    padding: 30px 0;
+    color: #6c757d;
+}
+
+    .empty-cart i {
+        font-size: 3rem;
+        color: var(--color-cuarto);
+        margin-bottom: 10px;
+    }
+
+/* Footer */
+footer {
+    background-color: var(--color-tercero);
+    color: white;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+/* Opciones de sal con íconos */
+.salt-option i {
+    margin-right: 8px;
+    color: var(--color-principal);
+}
+
+/* Añade esto al final de tu archivo CSS */
+
+/* Efecto de mordida para la galleta */
+.cookie-emoji {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 1.2em;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+/* Animación de mordida con tus colores */
+@keyframes cookieBite {
+    0% {
+        transform: scale(1) rotate(0deg);
+        color: var(--color-tercero);
+    }
+
+    20% {
+        transform: scale(1.2) rotate(-15deg);
+        color: var(--color-principal);
+    }
+
+    40% {
+        transform: scale(0.9) rotate(10deg);
+        opacity: 0.8;
+    }
+
+    60% {
+        transform: scale(0.85) rotate(-5deg);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        color: var(--color-tercero);
+    }
+}
+
+/* Efecto de mordida visible */
+.bite-effect {
+    animation: cookieBite 0.6s forwards;
+    position: relative;
+}
+
+    .bite-effect::after {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: var(--color-fondo); /* Usa tu color de fondo */
+        border-radius: 50%;
+        top: 2px;
+        right: 2px;
+        transform: scale(0);
+        transition: transform 0.3s ease-out;
+        box-shadow: inset 0 0 3px rgba(0,0,0,0.2);
+    }
+
+    .bite-effect.active::after {
+        transform: scale(1);
+    }
+
+/* Adaptación para el botón del carrito */
+#addToCartBtn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+    #addToCartBtn .cookie-emoji {
+        transition: all 0.3s ease;
+    }
+
+    #addToCartBtn:hover .cookie-emoji {
+        transform: scale(1.1);
+    }
+
+/* Efecto de pulso al agregar al carrito */
+@keyframes pulseEffect {
+    0% {
+        box-shadow: 0 0 0 0 rgba(217, 138, 41, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(217, 138, 41, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(217, 138, 41, 0);
+    }
+}
+
+.add-to-cart-effect {
+    animation: pulseEffect 0.7s ease-out;
+}

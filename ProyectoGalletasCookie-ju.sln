@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebGalletas", "WebGalletas\WebGalletas.csproj", "{E39A0A8E-8A00-4637-805D-D02D605B06AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dominio", "Dominio\Dominio.csproj", "{7B757D6B-5292-436F-9DBA-D0FCD194140C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".gitignore", ".gitignore", "{7579446D-9CD8-4447-94DC-0EDB89F2D876}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E39A0A8E-8A00-4637-805D-D02D605B06AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E39A0A8E-8A00-4637-805D-D02D605B06AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E39A0A8E-8A00-4637-805D-D02D605B06AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E39A0A8E-8A00-4637-805D-D02D605B06AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B757D6B-5292-436F-9DBA-D0FCD194140C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B757D6B-5292-436F-9DBA-D0FCD194140C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B757D6B-5292-436F-9DBA-D0FCD194140C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B757D6B-5292-436F-9DBA-D0FCD194140C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2D9DAF3-F499-4974-900B-0CAF60A27938}
+	EndGlobalSection
+EndGlobal

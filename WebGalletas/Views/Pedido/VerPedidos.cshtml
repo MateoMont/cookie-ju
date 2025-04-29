@@ -1,0 +1,115 @@
+﻿@using Dominio.Models
+@model List<Dominio.Models.Pedido>
+
+<h2>
+    @if (ViewBag.Telefono != null)
+    {
+        @:Historial de pedidos entregados para el número: @ViewBag.Telefono
+    }
+    else
+    {
+        @:Pedidos recibidos
+    }
+</h2>
+
+<form asp-action="HistorialPorTelefono" method="get" class="mb-3">
+    <input type="hidden" name="password" value="tati" />
+    <label for="telefono">Buscar historial por teléfono:</label>
+    <input type="text" name="telefono" id="telefono" class="form-control" placeholder="099123456" required />
+    <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+</form>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No se encontraron pedidos entregados para ese número.</p>
+}
+else
+{
+    <form method="get" asp-action="VerPedidos" class="mb-3 d-flex">
+        <input type="hidden" name="password" value="tati" />
+        <label for="estadoFiltro" class="me-2">Filtrar por estado:</label>
+        <select name="estadoFiltro" id="estadoFiltro" class="form-select me-2" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            @foreach (Estado estado in Enum.GetValues(typeof(Dominio.Models.Estado)))
+            {
+                <option value="@estado" selected="@(ViewBag.EstadoSeleccionado != null && estado.ToString() == ViewBag.EstadoSeleccionado.ToString() ? "selected" : null)">
+                    @estado
+                </option>
+            }
+        </select>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Teléfono</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Descripción</th>
+                <th>Items</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pedido in Model)
+            {
+                decimal totalPedido = 0;
+
+                <tr>
+                    <td>@pedido.Cliente</td>
+                    <td>@pedido.Telefono</td>
+                    <td>@pedido.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <form asp-action="ActualizarEstado" method="post" class="d-flex">
+                            <input type="hidden" name="id" value="@pedido.Id" />
+                            <select name="nuevoEstado" class="form-select form-select-sm me-2">
+                                @foreach (Estado estado in Enum.GetValues(typeof(Dominio.Models.Estado)))
+                                {
+                                    <option value="@estado" selected="@(estado == pedido.Estado ? "selected" : null)">
+                                        @estado
+                                    </option>
+                                }
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                        </form>
+                    </td>
+                    <td>@pedido.Descripcion</td>
+                    <td>
+                        <ul class="mb-1">
+                            @foreach (var item in pedido.ItemPedidos)
+                            {
+                                var galleta = item.Galleta;
+                                decimal precioBase = galleta.Precio;
+                                if (item.Integral)
+                                {
+                                    precioBase += 40;
+                                }
+                                decimal subtotal = precioBase * item.Cantidad;
+                                totalPedido += subtotal;
+
+                                <li>
+                                    <span class="fw-semibold">@galleta.Sabor</span>
+                                    @if (item.Integral)
+                                    {
+                                        <span class="badge bg-success ms-1">Integral</span>
+                                    }
+                                    @if (item.TieneSal)
+                                    {
+                                        <span class="badge bg-warning ms-1">Con Sal</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info ms-1">Sin Sal</span>
+                                    }
+                                    - Cantidad: @item.Cantidad
+                                    - Subtotal: $@subtotal
+                                </li>
+                            }
+                        </ul>
+                        <div class="fw-bold text-end mt-2 border-top pt-2">Total del pedido: $@totalPedido</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

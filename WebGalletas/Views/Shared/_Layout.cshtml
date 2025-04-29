@@ -1,0 +1,423 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Galletas Artesanales</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/site.css" />
+
+   
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="~/img/logo.png" alt="Logo" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                       
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="AcercaDe">Sobre Nosotros</a>
+                    </li>
+                    
+
+
+
+                    <li class="nav-item ms-3">
+                        @{
+                            var clave = Context.Request.Query["adminKey"].ToString();
+                            var mostrarBoton = clave == "Tati"; // poné tu clave real acá
+                        }
+
+                        @if (mostrarBoton)
+                        {
+                            <a href="/Pedido/IngresarClave" class="btn btn-ver-pedidos">Ver pedidos</a>
+                        }
+                    </li>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        @RenderBody()
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-5 fw-bold" style="color: var(--color-tercero);"> Galletas Caseras Artesanales</h1>
+                <p class="lead" style="color: var(--color-principal);">Selecciona tus sabores favoritos y personaliza tu pedido</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Selection Section -->
+            <div class="col-lg-8 mb-4" id="selectionSection">
+                <!-- Flavor Selection -->
+                <div class="flavor-card">
+                    <h3 class="section-title">Selecciona el Sabor</h3>
+                    <div class="mb-3">
+                        <select class="form-select" id="flavorSelect">
+                            <option value="1" data-sabor="Orégano" data-precio="100">Orégano</option>
+                            <option value="2" data-sabor="Semillas" data-precio="100">Semillas</option>
+                            <option value="3" data-sabor="Queso" data-precio="120">Queso</option>
+                            <option value="4" data-sabor="Comunes" data-precio="80">Comunes</option>
+                            <option value="5" data-sabor="Ajo" data-precio="100">Ajo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Options Selection -->
+                <div class="options-card">
+                    <h3 class="section-title">Personaliza tus Galletas</h3>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Harina:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flourType" id="regularFlour" value="regular" checked>
+                            <label class="form-check-label" for="regularFlour">
+                                Harina Común
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flourType" id="wholeWheatFlour" value="whole-wheat">
+                            <label class="form-check-label" for="wholeWheatFlour">
+                                Harina Integral
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Opción de Sal:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="saltOption" id="withSalt" value="with-salt" checked>
+                            <label class="form-check-label salt-option" for="withSalt">
+                                <i class="fas fa-mortar-pestle"></i>Con Sal
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="saltOption" id="noSalt" value="no-salt">
+                            <label class="form-check-label salt-option" for="noSalt">
+                                <i class="fas fa-ban"></i>Sin Sal
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad:</label>
+                        <div class="quantity-control">
+                            <button class="btn btn-outline-primary" id="decreaseQuantity">-</button>
+                            <input type="number" class="form-control quantity-input" id="quantityInput" value="1" min="1">
+                            <button class="btn btn-outline-primary" id="increaseQuantity">+</button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100" id="addToCartBtn">
+                        <i class="fas fa-cart-plus me-2"></i>Agregar al Carrito
+                        <span class="cookie-emoji">🍪</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cart Section -->
+            <div class="col-lg-4">
+                <div class="cart-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="section-title mb-0">Tu Carrito</h3>
+                        <span class="badge bg-primary rounded-pill" id="cartCount">0</span>
+                    </div>
+
+                    <div id="cartItems" class="mb-3">
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart"></i>
+                            <p>Aún no has agregado nada al carrito</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100" id="checkoutBtn" disabled>
+                        <i class="fas fa-credit-card me-2"></i>Finalizar Compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Finalizar Compra -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="checkoutModalLabel">
+                        <i class="fas fa-receipt me-2"></i>Detalles de la Compra
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form asp-action="Crear" method="post" id="purchaseForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="name" name="Cliente" required pattern="[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+" title="Solo letras y espacios.">
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="phone" name="Telefono" required pattern="[0-9]{8,15}" title="Debe contener entre 8 y 15 números.">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Descripción (opcional)</label>
+                            <textarea class="form-control" id="description" name="Descripcion"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4>Detalles del Pedido:</h4>
+                            <ul id="orderDetails"></ul>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="purchaseBtn">
+                            <i class="fas fa-check-circle me-2"></i>Confirmar Compra
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 Tienda de Galletas. Todos los derechos reservados.</p>
+    </footer>
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="toastMessage" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    ¡Compra confirmada!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let carrito = [];
+        const flavorSelect = document.getElementById("flavorSelect");
+        const quantityInput = document.getElementById("quantityInput");
+        const cartItems = document.getElementById("cartItems");
+        const cartCount = document.getElementById("cartCount");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        const addToCartBtn = document.getElementById("addToCartBtn");
+
+        // Crear elemento de galleta si no existe
+        if (addToCartBtn && !addToCartBtn.querySelector('.cookie-emoji')) {
+            const cookieEmoji = document.createElement('span');
+            cookieEmoji.className = 'cookie-emoji';
+            cookieEmoji.textContent = '🍪';
+            addToCartBtn.appendChild(cookieEmoji);
+        }
+
+        function animateCookie() {
+            const cookie = addToCartBtn.querySelector('.cookie-emoji');
+            if (!cookie) return;
+
+            // Resetear animación
+            cookie.style.animation = 'none';
+            void cookie.offsetWidth; // Truco para reiniciar animación
+
+            // Aplicar efectos
+            cookie.style.animation = 'cookieBite 0.6s forwards';
+
+            // Efecto de pulso en el botón
+            addToCartBtn.style.animation = 'none';
+            void addToCartBtn.offsetWidth;
+            addToCartBtn.style.animation = 'pulseEffect 0.7s ease-out';
+        }
+
+        function updateCart() {
+            cartItems.innerHTML = "";
+            let totalItems = 0;
+            carrito.forEach(item => {
+                totalItems += item.Cantidad;
+                cartItems.innerHTML += `
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>${item.sabor} x${item.Cantidad}</span>
+                            <span>$${(item.precio * item.Cantidad).toFixed(2)}</span>
+                        </div>
+                    `;
+            });
+            cartCount.textContent = totalItems;
+            checkoutBtn.disabled = totalItems === 0;
+        }
+
+        addToCartBtn.addEventListener("click", () => {
+            // Animación primero
+            animateCookie();
+
+            // Luego la lógica del carrito
+            setTimeout(() => {
+                const selectedOption = flavorSelect.selectedOptions[0];
+                const galletaId = parseInt(selectedOption.value);
+                const galletaSabor = selectedOption.getAttribute("data-sabor");
+                const galletaPrecio = parseFloat(selectedOption.getAttribute("data-precio"));
+                const quantity = parseInt(quantityInput.value);
+
+                const flourType = document.querySelector('input[name="flourType"]:checked').value;
+                const esConHarinaIntegral = flourType === "whole-wheat";
+
+                const saltOption = document.querySelector('input[name="saltOption"]:checked').value;
+                const tieneSal = saltOption === "with-salt";
+
+                if (!galletaId || quantity <= 0) return;
+
+                let precioFinal = galletaPrecio;
+                if (esConHarinaIntegral) {
+                    precioFinal += 40;
+                }
+
+                carrito.push({
+                    galletaId,
+                    sabor: `${galletaSabor} (${esConHarinaIntegral ? "Integral" : "Común"} - ${tieneSal ? "Con Sal" : "Sin Sal"})`,
+                    precio: precioFinal,
+                    Cantidad: quantity,
+                    Integral: esConHarinaIntegral,
+                    TieneSal: tieneSal
+                });
+
+                updateCart();
+            }, 300); // Pequeño retraso para que se vea la animación
+        });
+
+        checkoutBtn.addEventListener("click", () => {
+            const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+            checkoutModal.show();
+
+            const orderDetails = document.getElementById("orderDetails");
+            orderDetails.innerHTML = "";
+
+            let totalPrice = 0;
+            carrito.forEach(item => {
+                orderDetails.innerHTML += `<li>${item.sabor} x${item.Cantidad} - $${(item.precio * item.Cantidad).toFixed(2)}</li>`;
+                totalPrice += item.precio * item.Cantidad;
+            });
+
+            orderDetails.innerHTML += `<li class="fw-bold">Total: $${totalPrice.toFixed(2)}</li>`;
+        });
+        document.getElementById("purchaseForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const description = document.getElementById("description").value;
+
+            const soloLetras = /^[A-Za-zñÑáéíóúÁÉÍÓÚ\s]+$/;
+            const soloNumeros = /^[0-9]{8,15}$/;
+
+            if (!soloLetras.test(name)) {
+                showToast("El nombre solo puede contener letras y espacios.", "danger");
+                return;
+            }
+
+            if (!soloNumeros.test(phone)) {
+                showToast("El teléfono debe contener solo números (de 8 a 15 dígitos).", "danger");
+                return;
+            }
+
+            // Botón de compra en modo loading
+            const purchaseBtn = document.getElementById("purchaseBtn");
+            const originalBtnText = purchaseBtn.innerHTML;
+            purchaseBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...`;
+            purchaseBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append("Cliente", name);
+            formData.append("Telefono", phone);
+            formData.append("Descripcion", description);
+            formData.append("ItemsJson", JSON.stringify(carrito.map(item => ({
+                GalletaId: item.galletaId,
+                Cantidad: item.Cantidad,
+                Integral: item.Integral,
+                TieneSal: item.TieneSal
+            }))));
+
+            try {
+                const response = await fetch("/Pedido/Crear", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    carrito = [];
+                    updateCart();
+                    const checkoutModal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                    checkoutModal.hide();
+                    document.getElementById("purchaseForm").reset();
+                    showToast("Compra confirmada. ¡Gracias por tu compra!", "success");
+                } else {
+                    showToast("Error al confirmar la compra.", "danger");
+                }
+            } catch (err) {
+                console.error("Error:", err);
+                showToast("Ocurrió un error al enviar el pedido.", "danger");
+            } finally {
+                // Restaurar el botón aunque haya éxito o error
+                purchaseBtn.innerHTML = originalBtnText;
+                purchaseBtn.disabled = false;
+            }
+        });
+
+        // Función para mostrar Toasts
+        function showToast(message, type = "success") {
+            const toastContainer = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            toast.className = `toast align-items-center text-bg-${type} border-0`;
+            toast.role = "alert";
+            toast.ariaLive = "assertive";
+            toast.ariaAtomic = "true";
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+            toastContainer.appendChild(toast);
+
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+
+            toast.addEventListener("hidden.bs.toast", () => {
+                toast.remove();
+            });
+        }
+
+
+
+        // Controles de cantidad
+        document.getElementById("increaseQuantity").addEventListener("click", () => {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        });
+
+        document.getElementById("decreaseQuantity").addEventListener("click", () => {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        });
+    </script>
+    <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;"></div>
+</body>
+</html>
